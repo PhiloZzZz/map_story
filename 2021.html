@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2021年我国航天年度发展态势</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #0a0e2a;
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(41, 79, 143, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(91, 112, 10, 0.08) 0%, transparent 20%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1260px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .metrics-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+        
+        .metric-card {
+            flex: 1;
+            min-width: 235px;
+            max-width: 295px;
+            height: 280px;
+            border-radius: 20px;
+            padding: 30px 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* 将装饰条置于底部，并与对应矩形的底部颜色协调 */
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            border-radius: 0 0 20px 20px;
+        }
+        
+        /* 四个矩形底部装饰条颜色与底部浅黄色协调，从左向右递减 */
+        .metric-card:nth-child(1) {
+            background: linear-gradient(to bottom, #ffffff 0%, #fff9cc 100%);
+        }
+        .metric-card:nth-child(1)::before {
+            background: linear-gradient(90deg, #fff9cc, #ffef99);
+        }
+        
+        .metric-card:nth-child(2) {
+            background: linear-gradient(to bottom, #ffffff 0%, #fffbd6 100%);
+        }
+        .metric-card:nth-child(2)::before {
+            background: linear-gradient(90deg, #fffbd6, #ffeeb3);
+        }
+        
+        .metric-card:nth-child(3) {
+            background: linear-gradient(to bottom, #ffffff 0%, #fffde6 100%);
+        }
+        .metric-card:nth-child(3)::before {
+            background: linear-gradient(90deg, #fffde6, #fff4cc);
+        }
+        
+        .metric-card:nth-child(4) {
+            background: linear-gradient(to bottom, #ffffff 0%, #fffef3 100%);
+        }
+        .metric-card:nth-child(4)::before {
+            background: linear-gradient(90deg, #fffef3, #fff9e6);
+        }
+        
+        .metric-icon {
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+        }
+        
+        .metric-value {
+            color: #5b70a0;
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+            line-height: 1;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .metric-label {
+            color: #666666;
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.4;
+            max-width: 90%;
+        }
+        
+        .time-period {
+            text-align: center;
+            color: #a0b3d6;
+            font-size: 0.8rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 0.8px;
+        }
+        
+        .footer-note {
+            text-align: center;
+            color: #6c7a9c;
+            font-size: 0.8rem;
+            margin-top: 50px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.5;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1150px) {
+            .metrics-container {
+                gap: 20px;
+            }
+            
+            .metric-card {
+                min-width: 215px;
+                height: 260px;
+            }
+            
+            .container {
+                max-width: 1180px;
+            }
+        }
+        
+        @media (max-width: 950px) {
+            .metrics-container {
+                gap: 20px;
+            }
+            
+            .metric-card {
+                min-width: calc(50% - 25px);
+                height: 240px;
+            }
+            
+            .metric-value {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .metrics-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .metric-card {
+                min-width: 90%;
+                max-width: 350px;
+                height: 200px;
+                margin-bottom: 20px;
+            }
+            
+            .metric-value {
+                font-size: 2.3rem;
+            }
+            
+            .metric-label {
+                font-size: 0.9rem;
+            }
+            
+            .time-period {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="time-period">数据统计周期：2021年1月1日 - 2021年12月31日</div>
+        
+        <div class="metrics-container">
+            <!-- 卡片1：发射总次数 -->
+            <div class="metric-card">
+                <div class="metric-icon">🚀</div>
+                <div class="metric-value">55次</div>
+                <div class="metric-label">年度发射总次数<br>（世界首位）</div>
+            </div>
+            
+            <!-- 卡片2：发射航天器总质量 -->
+            <div class="metric-card">
+                <div class="metric-icon">⚖️</div>
+                <div class="metric-value">191.19吨</div>
+                <div class="metric-label">发射航天器总质量</div>
+            </div>
+            
+            <!-- 卡片3：长征系列火箭发射次数 -->
+            <div class="metric-card">
+                <div class="metric-icon">✅</div>
+                <div class="metric-value">48次</div>
+                <div class="metric-label">长征系列火箭发射次数</div>
+            </div>
+            
+            <!-- 卡片4：发射航天器数量 -->
+            <div class="metric-card">
+                <div class="metric-icon">🛰️</div>
+                <div class="metric-value">103个</div>
+                <div class="metric-label">发射航天器数量</div>
+            </div>
+        </div>
+        
+        <div class="footer-note">
+            数据来源：《中国航天科技活动蓝皮书（2021年）》及公开资料<br>
+            注：2021年中国航天全年实施55次发射任务，发射次数位居世界首位，发射航天器总质量191.19吨
+        </div>
+    </div>
+    
+    <script>
+        // 添加卡片交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.metric-card');
+            
+            cards.forEach(card => {
+                // 鼠标悬停时添加轻微放大效果
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-12px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

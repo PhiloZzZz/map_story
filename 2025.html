@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年上半年我国航天年度发展态势</title>
     <style>
         * {
             margin: 0;
@@ -19,35 +20,14 @@
             background-image: 
                 radial-gradient(circle at 10% 20%, rgba(41, 79, 143, 0.1) 0%, transparent 20%),
                 radial-gradient(circle at 90% 80%, rgba(91, 112, 10, 0.08) 0%, transparent 20%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
             max-width: 1200px;
             margin: 0 auto;
-        }
-        
-        .dashboard-title {
-            text-align: center;
-            color: #ffffff;
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 50px;
-            padding-top: 15px;
-            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            letter-spacing: 1.2px;
-            position: relative;
-        }
-        
-        .dashboard-title::after {
-            content: '';
-            position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #5b70a0, transparent);
-            border-radius: 2px;
         }
         
         .metrics-container {
@@ -147,8 +127,8 @@
             text-align: center;
             color: #a0b3d6;
             font-size: 0.8rem;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            margin-top: 0;
+            margin-bottom: 30px;
             font-weight: 300;
             letter-spacing: 0.8px;
         }
@@ -173,10 +153,6 @@
                 min-width: 200px;
                 height: 260px;
             }
-            
-            .dashboard-title {
-                font-size: 2rem;
-            }
         }
         
         @media (max-width: 900px) {
@@ -187,10 +163,6 @@
             .metric-card {
                 min-width: calc(50% - 20px);
                 height: 240px;
-            }
-            
-            .dashboard-title {
-                font-size: 1.8rem;
             }
             
             .metric-value {
@@ -211,11 +183,6 @@
                 margin-bottom: 20px;
             }
             
-            .dashboard-title {
-                font-size: 1.6rem;
-                margin-bottom: 35px;
-            }
-            
             .metric-value {
                 font-size: 2.3rem;
             }
@@ -232,7 +199,6 @@
 </head>
 <body>
     <div class="container">
-        
         <div class="time-period">数据统计周期：2025年1月1日 - 2025年6月30日</div>
         
         <div class="metrics-container">
@@ -289,5 +255,4 @@
         });
     </script>
 </body>
-
 </html>

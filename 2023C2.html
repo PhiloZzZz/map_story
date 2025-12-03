@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全球主要火箭系列发射次数动态排序图 (2016-2023)</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 20px;
+            background-color: #12171f;
+            color: #fff;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            height: 100%;
+        }
+        #main {
+            width: 100%;
+            height: 700px;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.2);
+            background: linear-gradient(145deg, #0a1525, #14213d);
+            border: 1px solid rgba(64, 158, 255, 0.1);
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(64, 158, 255, 0.5);
+        }
+        .subtitle {
+            text-align: center;
+            color: #a0c8ff;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 8px 16px;
+            background: rgba(64, 158, 255, 0.15);
+            border: 1px solid rgba(64, 158, 255, 0.3);
+            color: #a0c8ff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        button:hover {
+            background: rgba(64, 158, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 100, 255, 0.2);
+        }
+        button.active {
+            background: rgba(255, 215, 0, 0.3);
+            border-color: #ffd700;
+            color: #ffd700;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        .legend-info {
+            text-align: center;
+            color: #88c1ff;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .champion-box {
+            position: absolute;
+            top: 40px;
+            right: 20px;
+            width: 220px;
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ffffff 0%, #ffd700 100%);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            border: 2px solid #ffd700;
+            z-index: 10;
+            animation: pulse 2s infinite;
+        }
+        .champion-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .champion-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d40000;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        .champion-count {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 5px;
+        }
+        .champion-year {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">全球主要火箭系列发射次数动态排序图 (2016-2023)</div>
+    <div class="subtitle">数据来源：各国航天机构公开数据 | 单位：发射次数</div>
+    
+    <div class="controls">
+        <button id="playBtn" class="active">⏸ 暂停</button>
+        <button id="resetBtn">↺ 重置</button>
+        <button id="speedSlow">慢速</button>
+        <button id="speedNormal" class="active">正常</button>
+        <button id="speedFast">快速</button>
+    </div>
+    
+    <div id="main"></div>
+    <div class="legend-info">* 亮黄色高亮线条为中国长征系列火箭数据</div>
+
+    <script>
+        // 重构数据格式 - 按年份组织
+        const yearlyData = {};
+        const allYears = [2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023];
+        const allCountries = [
+            '中国（长征系列）',
+            '美国（猎鹰系列）', 
+            '俄罗斯（联盟号2系列）',
+            '新西兰（电子号）',
+            '美国（宇宙神5系列）',
+            '欧洲（阿里安5系列）'
+        ];
+
+        // 初始化数据结构
+        allYears.forEach(year => {
+            yearlyData[year] = {};
+            allCountries.forEach(country => {
+                yearlyData[year][country] = 0;
+            });
+        });
+
+        // 填充数据
+        const rawData = [
+            [2016, '中国（长征系列）', 22],
+            [2017, '中国（长征系列）', 16],
+            [2018, '中国（长征系列）', 37],
+            [2019, '中国（长征系列）', 26],
+            [2020, '中国（长征系列）', 34],
+            [2021, '中国（长征系列）', 49],
+            [2022, '中国（长征系列）', 53],
+            [2023, '中国（长征系列）', 47],
+
+            [2016, '美国（猎鹰系列）', 9],
+            [2017, '美国（猎鹰系列）', 18],
+            [2018, '美国（猎鹰系列）', 21],
+            [2019, '美国（猎鹰系列）', 13],
+            [2020, '美国（猎鹰系列）', 25],
+            [2021, '美国（猎鹰系列）', 31],
+            [2022, '美国（猎鹰系列）', 61],
+            [2023, '美国（猎鹰系列）', 96],
+
+            [2016, '俄罗斯（联盟号2系列）', 8],
+            [2017, '俄罗斯（联盟号2系列）', 10],
+            [2018, '俄罗斯（联盟号2系列）', 11],
+            [2019, '俄罗斯（联盟号2系列）', 15],
+            [2020, '俄罗斯（联盟号2系列）', 15],
+            [2021, '俄罗斯（联盟号2系列）', 22],
+            [2022, '俄罗斯（联盟号2系列）', 19],
+            [2023, '俄罗斯（联盟号2系列）', 17],
+
+            [2016, '新西兰（电子号）', 0],
+            [2017, '新西兰（电子号）', 1],
+            [2018, '新西兰（电子号）', 3],
+            [2019, '新西兰（电子号）', 6],
+            [2020, '新西兰（电子号）', 7],
+            [2021, '新西兰（电子号）', 6],
+            [2022, '新西兰（电子号）', 9],
+            [2023, '新西兰（电子号）', 9],
+
+            [2016, '美国（宇宙神5系列）', 8],
+            [2017, '美国（宇宙神5系列）', 6],
+            [2018, '美国（宇宙神5系列）', 5],
+            [2019, '美国（宇宙神5系列）', 2],
+            [2020, '美国（宇宙神5系列）', 5],
+            [2021, '美国（宇宙神5系列）', 4],
+            [2022, '美国（宇宙神5系列）', 7],
+            [2023, '美国（宇宙神5系列）', 2],
+
+            [2016, '欧洲（阿里安5系列）', 7],
+            [2017, '欧洲（阿里安5系列）', 6],
+            [2018, '欧洲（阿里安5系列）', 6],
+            [2019, '欧洲（阿里安5系列）', 4],
+            [2020, '欧洲（阿里安5系列）', 3],
+            [2021, '欧洲（阿里安5系列）', 3],
+            [2022, '欧洲（阿里安5系列）', 3],
+            [2023, '欧洲（阿里安5系列）', 2]
+        ];
+
+        rawData.forEach(item => {
+            const [year, country, launches] = item;
+            yearlyData[year][country] = launches;
+        });
+
+        // 颜色配置
+        const colorMap = {
+            '中国（长征系列）': '#FFD700',  // 亮黄色
+            '美国（猎鹰系列）': '#64B5F6',  // 浅蓝色
+            '俄罗斯（联盟号2系列）': '#81C784',  // 浅绿色
+            '新西兰（电子号）': '#FFB74D',  // 浅橙色
+            '美国（宇宙神5系列）': '#BA68C8',  // 浅紫色
+            '欧洲（阿里安5系列）': '#4DB6AC'   // 浅青色
+        };
+
+        // 初始化图表
+        const chartDom = document.getElementById('main');
+        const myChart = echarts.init(chartDom);
+
+        // 创建冠军展示框
+        function createChampionBox(year) {
+            // 移除旧的冠军框
+            const oldBox = document.querySelector('.champion-box');
+            if (oldBox) oldBox.remove();
+            
+            // 计算当年冠军
+            let champion = '';
+            let maxLaunches = 0;
+            
+            allCountries.forEach(country => {
+                const launches = yearlyData[year][country];
+                if (launches > maxLaunches) {
+                    maxLaunches = launches;
+                    champion = country;
+                }
+            });
+            
+            // 创建冠军框
+            const championBox = document.createElement('div');
+            championBox.className = 'champion-box';
+            championBox.innerHTML = `
+                <div class="champion-title">
+                    <span>🏆</span>
+                    <span>年度发射冠军</span>
+                </div>
+                <div class="champion-name">${champion}</div>
+                <div class="champion-count">${maxLaunches} 次</div>
+                <div class="champion-year">${year} 年</div>
+            `;
+            
+            // 添加到图表容器
+            chartDom.parentNode.appendChild(championBox);
+        }
+
+        // 创建系列数据
+        function createSeriesData(currentYear) {
+            const seriesData = [];
+            
+            allCountries.forEach(country => {
+                const isChina = country === '中国（长征系列）';
+                const data = [];
+                
+                // 为每个年份创建数据点
+                for (let year = 2016; year <= currentYear; year++) {
+                    data.push({
+                        name: year.toString(),
+                        value: [year.toString(), yearlyData[year][country]]
+                    });
+                }
+                
+                seriesData.push({
+                    name: country,
+                    type: 'line',
+                    data: data,
+                    showSymbol: true,
+                    symbolSize: 6,
+                    // 添加动画配置 - 实现平滑延伸
+                    animation: true,
+                    animationDuration: 1000,
+                    animationEasing: 'cubicOut',
+                    animationDelay: function(idx) {
+                        return idx * 100;
+                    },
+                    endLabel: {
+                        show: true,
+                        formatter: function (params) {
+                            return params.value[1];
+                        },
+                        color: colorMap[country] || '#fff',
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    },
+                    lineStyle: {
+                        width: isChina ? 4 : 2,
+                        shadowBlur: isChina ? 10 : 0,
+                        shadowColor: isChina ? 'rgba(255, 215, 0, 0.6)' : 'transparent'
+                    },
+                    itemStyle: {
+                        color: colorMap[country] || '#fff'
+                    },
+                    emphasis: {
+                        lineStyle: {
+                            width: isChina ? 6 : 4,
+                            shadowBlur: isChina ? 15 : 8
+                        }
+                    }
+                });
+            });
+            
+            return seriesData;
+        }
+
+        // 创建基础配置
+        const baseOption = {
+            animation: true,
+            animationDuration: 1000,
+            animationEasing: 'cubicOut',
+            animationDelay: 0,
+            title: {
+                text: '全球主要火箭系列发射次数动态排序图 - 2016年',
+                left: 'center',
+                textStyle: {
+                    color: '#fff',
+                    fontSize: 24,
+                    fontWeight: 'bold'
+                }
+            },
+            tooltip: {
+                trigger: 'axis',
+                order: 'valueDesc',
+                backgroundColor: 'rgba(18, 23, 31, 0.9)',
+                borderColor: 'rgba(64, 158, 255, 0.3)',
+                textStyle: {
+                    color: '#fff'
+                },
+                formatter: function (params) {
+                    const year = params[0].axisValue;
+                    let result = `<div style="margin-bottom:5px;font-weight:bold">${year}年</div>`;
+                    
+                    // 按值排序
+                    params.sort((a, b) => b.value[1] - a.value[1]);
+                    
+                    params.forEach(param => {
+                        const color = colorMap[param.seriesName] || '#fff';
+                        result += `
+                            <div style="display:flex;align-items:center;margin:2px 0;">
+                                <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:8px"></span>
+                                <span>${param.seriesName}: </span>
+                                <span style="font-weight:bold;margin-left:5px;color:${color}">${param.value[1]}次</span>
+                            </div>
+                        `;
+                    });
+                    return result;
+                }
+            },
+            legend: {
+                data: allCountries,
+                top: 40,
+                textStyle: {
+                    color: '#a0c8ff'
+                },
+                itemWidth: 12,
+                itemHeight: 12,
+                itemGap: 20
+            },
+            xAxis: {
+                type: 'category',
+                name: '年份',
+                nameLocation: 'middle',
+                nameGap: 30,
+                data: allYears,
+                nameTextStyle: {
+                    color: '#a0c8ff',
+                    fontSize: 14
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(160, 200, 255, 0.3)'
+                    }
+                },
+                axisLabel: {
+                    color: '#a0c8ff',
+                    fontSize: 12
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: '发射次数',
+                nameTextStyle: {
+                    color: '#a0c8ff',
+                    fontSize: 14
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: 'rgba(160, 200, 255, 0.3)'
+                    }
+                },
+                axisLabel: {
+                    color: '#a0c8ff',
+                    fontSize: 12
+                },
+                splitLine: {
+                    lineStyle: {
+                        color: 'rgba(160, 200, 255, 0.1)',
+                        type: 'dashed'
+                    }
+                }
+            },
+            grid: {
+                left: 80,
+                right: 250, // 增加右边距，为冠军框留出空间
+                top: 100,
+                bottom: 50
+            }
+        };
+
+        // 初始设置
+        let currentYear = 2016;
+        let animationInterval = null;
+        let animationSpeed = 1000;
+        let isPlaying = true;
+
+        // 更新图表函数
+        function updateChart(year) {
+            currentYear = year;
+            
+            const updatedOption = {
+                title: {
+                    text: `全球主要火箭系列发射次数动态排序图 - ${year}年`
+                },
+                series: createSeriesData(year)
+            };
+            
+            myChart.setOption(updatedOption);
+            
+            // 更新冠军展示框
+            createChampionBox(year);
+        }
+
+        // 开始动画
+        function startAnimation() {
+            if (animationInterval) clearInterval(animationInterval);
+            
+            animationInterval = setInterval(() => {
+                let nextYear = currentYear + 1;
+                if (nextYear > 2023) {
+                    nextYear = 2016;
+                }
+                updateChart(nextYear);
+            }, animationSpeed);
+            
+            isPlaying = true;
+            document.getElementById('playBtn').textContent = '⏸ 暂停';
+            document.getElementById('playBtn').classList.add('active');
+        }
+
+        // 停止动画
+        function stopAnimation() {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+                isPlaying = false;
+                document.getElementById('playBtn').textContent = '▶ 播放';
+                document.getElementById('playBtn').classList.remove('active');
+            }
+        }
+
+        // 切换播放/暂停
+        function toggleAnimation() {
+            if (isPlaying) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        }
+
+        // 重置动画
+        function resetAnimation() {
+            stopAnimation();
+            currentYear = 2016;
+            updateChart(currentYear);
+            startAnimation();
+        }
+
+        // 设置动画速度
+        function setAnimationSpeed(speed) {
+            animationSpeed = speed;
+            if (isPlaying) {
+                stopAnimation();
+                startAnimation();
+            }
+        }
+
+        // 初始化图表
+        myChart.setOption({
+            ...baseOption,
+            series: createSeriesData(currentYear)
+        });
+
+        // 初始化冠军展示框
+        createChampionBox(currentYear);
+
+        // 按钮事件监听
+        document.getElementById('playBtn').addEventListener('click', toggleAnimation);
+        
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            resetAnimation();
+        });
+
+        document.getElementById('speedSlow').addEventListener('click', function() {
+            setAnimationSpeed(1500);
+            updateSpeedButtons(this);
+        });
+
+        document.getElementById('speedNormal').addEventListener('click', function() {
+            setAnimationSpeed(1000);
+            updateSpeedButtons(this);
+        });
+
+        document.getElementById('speedFast').addEventListener('click', function() {
+            setAnimationSpeed(500);
+            updateSpeedButtons(this);
+        });
+
+        // 更新速度按钮状态
+        function updateSpeedButtons(activeButton) {
+            document.querySelectorAll('[id^="speed"]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            activeButton.classList.add('active');
+        }
+
+        // 初始启动动画
+        startAnimation();
+
+        // 响应式调整
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    </script>
+</body>
+</html>

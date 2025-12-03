@@ -35,7 +35,7 @@
 
   <script type="text/javascript">
     var dom = document.getElementById('container');
-    var myChart = echarts.init(dom, 'dark', {
+    var myChart = echarts.init(dom, 'null', {
       renderer: 'canvas',
       useDirtyRect: false
     });
@@ -534,6 +534,7 @@
   animation: true,
   animationDuration: 1500,
   animationEasing: 'cubicOut'
+
 };
 
     if (option && typeof option === 'object') {

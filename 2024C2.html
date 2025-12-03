@@ -1,0 +1,235 @@
+<!--
+	此示例下载自 https://echarts.apache.org/examples/zh/editor.html?c=bar-polar-label-radial&theme=dark&code=pVbNbttGEL4X6DsQKAq2gOHQkmjLKnpwek0RID6kQZDDilxJi1KkQK4cu4GAFHFhNIjsHlLLsVPUDdxEQRM7KITEP5X6MiIpnfoKnSW5_JEpy3JsQSJ3Zme_nfnmx6hRYujC18KDTz8RBEqohgv-M7zhVVoQxIyUydknHft5e9Bt282_nJ3fnV_fDTe27KMT5-ipOONra7jEtBWsU2zyRWZima7FjAqCYmiGCZqflUolricIJUOny-QHUJzLJxZvY1KuMMtFQ1NFX9JgPw1PrWZoCKwF1k2kkrpVEO6Kc_Ln4owg5uHnXmDPh8aEsuQJZSaMTPmbl1YJGOAuWKsBInEFaXXMsVaJXhAk_oJWAbEEf8ECgu03UBFraTdWFCW6sVUx7heEEtIsLFy7Jgx3fxm0tuzmY7u3Puh2nP0N923vv3-eDA5f23u9wR9tZ6_jHj50Oj8GPogfSPS4hzV4HfV6DEUulwv8GHgyMmbVNEI_3lrkU6SXNZzmUgVRXDbMNe4PFVHEQuP2Nu29LotO__ht8OS8eeV0_vbW_l13uy1n-4i92D-9759tewqtP53nb7y15jv79GUYcosiky4xDAVhQb4gRH4wqFnHYXwm8jR3AU9DURWZZUaYiNQ1pKpEL8NlpRngEbAHfu4xCrhnz_ywQ6jtg1339emw1ZkY7RToE0Imy_I0BJj-AMaJUDcMuYqsCuYpnEYWahgaJbWIKiYpl1nGioTiKrdYMswqol4miw-KDdBWGsMXLS4uIuX7smnUdfWbAI5ZLqIvpBnvf3bhy1DRMFVsciXPKZetWueQrxCrjrRvUYQ9lt1j68Y85z6pYt2COhzJiX4LUicFwF0PgUdJH0xmAflFLAHIwibBrBD6ktBKEIoiCkt0mHpRvGIhhaux2gf8zc9lYyEVBB1VmSWer3ERi9Z5dox6kQGPSwM-xNk4DsyctBglXwwMLxmXA2NVkGrcv67VAVGWOz4pDNkBeBdRPmmZK90slSxMv4uClya-c148QsD0I3yl20SlFUA5Ioy5Ey_Oz1_VnXlpMc2bvOxOHdqPwZKV51IjGxX-6eFIcv7KcHKprOetZ2osaj53ddanZyBvftNjkbLKlSmTSXWL332nh6LkM3gsFP7ImzrbCVlBdBghltcssA9GvDkwOlkb6e-pXYxNjxZhAzAYMOrUIipMeawTO09P-senwZKz03MPTmH-tQ-2h4_a0e4JnWj8EJEYI-Jl4YJBwm9L15M1A-bOdI2gYMSjpBKYhnSFHSn7l_Rmjf7xpvPzht194e6uDz785r48i7YgjZSZb5JDvUcDbFKiIG0p0KgSVdXCETk55mRmBDiQfUcRvKBPs5mIfWZlaNUezg9n9uN9mIyHD7ecnc3BoyfOs6OYIe_Ct4LJP94XErUzXlZSWn84lSQpdAOtAQsSRKoAJW7C_TXW7T0-ReP7cKNpb-37jo12VI2VaIdoVUiJ3hG9Tb566737Cq7Y7nebbvfwPJL0FEremw-309w7m82m3BtXaxVkxSZ2L3sg1nB8fJ5JT7MxiTZmcJ7I-cvwBEa69MI1rvTEG38m2ZWTbd87KSMz9oZf0mw-cV7aOMt43vjqfw&enc=deflate
+	⚠ 请注意，该图表不是 Apache ECharts 官方示例，而是由用户代码生成的。请注意鉴别其内容。
+-->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="height: 100%; margin: 0">
+  <div id="container" style="height: 100%"></div>
+
+  
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  
+  <!-- Uncomment this line if you want to dataTool extension
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/extension/dataTool.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use gl extension
+  <script type="text/javascript" src="https://echarts.apache.org/zh/js/vendors/echarts-gl/dist/echarts-gl.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-stat extension
+  <script type="text/javascript" src="https://echarts.apache.org/zh/js/vendors/echarts-stat/dist/ecStat.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to echarts-graph-modularity extension
+  <script type="text/javascript" src="https://echarts.apache.org/zh/js/vendors/echarts-graph-modularity/dist/echarts-graph-modularity.min.js"></script>
+  -->
+  <!-- Uncomment this line if you want to use map
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+  -->
+  <!-- Uncomment these two lines if you want to use bmap extension
+  <script type="text/javascript" src="https://api.map.baidu.com/api?v=3.0&ak=YOUR_API_KEY"></script>
+  <script type="text/javascript" src="https://fastly.jsdelivr.net/npm/echarts@5/dist/extension/bmap.min.js"></script>
+  -->
+
+  <script type="text/javascript">
+    var dom = document.getElementById('container');
+    var myChart = echarts.init(dom, 'dark', {
+      renderer: 'canvas',
+      useDirtyRect: false
+    });
+    var app = {};
+    
+    var option;
+
+    option = {
+  title: {
+    text: '2024年在轨卫星数量对比',
+    left: 'center',
+    textStyle: {
+      color: '#fff',
+      fontSize: 18,
+      fontWeight: 'bold'
+    }
+  },
+  polar: {
+    radius: ['15%', '85%'],
+    center: ['50%', '55%']
+  },
+  radiusAxis: {
+    type: 'value',
+    min: 0,
+    max: 10000,
+    axisLabel: {
+      color: '#ccc',
+      show: false // 隐藏半径轴标签，让图表更简洁
+    },
+    axisLine: {
+      lineStyle: {
+        color: '#444'
+      }
+    },
+    splitLine: {
+      lineStyle: {
+        color: '#444'
+      }
+    }
+  },
+  angleAxis: {
+    type: 'category',
+    data: ['美国', '中国', '欧洲', '俄罗斯', '其他', '日本', '印度'],
+    startAngle: 75,
+    axisLabel: {
+      show: true,
+      color: '#fff',
+      fontSize: 14,
+      fontWeight: 'bold',
+      margin: 8,
+      padding: [0, 0, 10, 0] // 给标签更多空间
+    },
+    axisLine: {
+      show: true,
+      lineStyle: {
+        color: '#555'
+      }
+    },
+    splitLine: {
+      show: true,
+      lineStyle: {
+        color: '#444',
+        type: 'dashed'
+      }
+    }
+  },
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c}颗',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    borderColor: '#555',
+    textStyle: {
+      color: '#fff'
+    }
+  },
+  visualMap: {
+    show: false,
+    min: 0,
+    max: 6,
+    dimension: 0,
+    inRange: {
+      color: ['#ffffff', '#fff27a']
+    }
+  },
+  series: [
+    {
+      type: 'bar',
+      data: [
+        {
+          value: 8813,
+          name: '美国',
+          itemStyle: {
+            color: '#fff27a'
+          }
+        },
+        {
+          value: 1094,
+          name: '中国',
+          itemStyle: {
+            shadowBlur: 30,
+            shadowColor: '#fff9a8',
+            shadowOffsetX: 0,
+            shadowOffsetY: 0,
+            borderColor: '#fff9a8',
+            borderWidth: 3,
+            color: '#ffe966'
+          }
+        },
+        {
+          value: 809,
+          name: '欧洲',
+          itemStyle: {
+            color: '#ffe966'
+          }
+        },
+        {
+          value: 351,
+          name: '俄罗斯',
+          itemStyle: {
+            color: '#ffe058'
+          }
+        },
+        {
+          value: 343,
+          name: '其他',
+          itemStyle: {
+            color: '#ffd84a'
+          }
+        },
+        {
+          value: 113,
+          name: '日本',
+          itemStyle: {
+            color: '#ffd03c'
+          }
+        },
+        {
+          value: 82,
+          name: '印度',
+          itemStyle: {
+            color: '#ffc82e'
+          }
+        }
+      ],
+      coordinateSystem: 'polar',
+      label: {
+        show: true,
+        position: 'outside', // 改为outside显示在外部
+        formatter: '{b}: {c}颗',
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: 'bold',
+        textBorderColor: '#000',
+        textBorderWidth: 2,
+        distance: 15, // 标签与扇形的距离
+        align: 'center',
+        verticalAlign: 'middle',
+        padding: [2, 5, 2, 5],
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // 添加半透明背景
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#555'
+      },
+      labelLayout: {
+        hideOverlap: true, // 隐藏重叠标签
+        moveOverlap: 'shiftY' // 重叠时移动位置
+      },
+      itemStyle: {
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#333'
+      },
+      emphasis: {
+        scale: false,
+        label: {
+          show: true,
+          fontSize: 14,
+          fontWeight: 'bold',
+          backgroundColor: 'rgba(0, 0, 0, 0.7)'
+        },
+        itemStyle: {
+          shadowBlur: 20,
+          shadowColor: 'rgba(255, 255, 255, 0.8)'
+        }
+      }
+    }
+  ],
+};
+
+    if (option && typeof option === 'object') {
+      myChart.setOption(option);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+  </script>
+</body>
+</html>
